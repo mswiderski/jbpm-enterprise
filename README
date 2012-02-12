@@ -1,0 +1,7 @@
+jbpm-enterprise project is to extend world class leading bpm engine to provide enterprise ready solutions on top of it.
+
+This project aims at delivering:
+* deployment model in platform approach
+* easy yet powerful versioning of your business logic
+* integration with application servers (JBoss AS 7 as reference)
+* independent invocation patterns (possibility to invoke business processes on various versions of jBPM as well as verious versions of process in isolation)
