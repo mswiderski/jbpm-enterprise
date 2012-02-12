@@ -9,4 +9,11 @@
   <artifactId>jbpm-enterprise-platform-api</artifactId>
   <name>jBPM :: enterprise-platform-api</name>
   <description>Main APIs for the platform</description>
+  <dependencies>
+  	<dependency>
+  		<groupId>org.drools</groupId>
+  		<artifactId>knowledge-api</artifactId>
+  		<version>5.3.1.Final</version>
+  	</dependency>
+  </dependencies>
 </project>
