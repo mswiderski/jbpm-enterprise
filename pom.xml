@@ -1,0 +1,18 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.jbpm</groupId>
+  <artifactId>jbpm-enterprise</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>jbpm :: enterprise</name>
+  <description>Enterprise extension of jBPM 5 project</description>
+  <packaging>pom</packaging>
+  <modules>
+  	<module>jbpm-enterprise-api</module>
+  	<module>jbpm-enterprise-impl</module>
+  	<module>jbpm-enterprise-addons</module>
+  	<module>jbpm-enterprise-appservers</module>
+  	<module>jbpm-enterprise-ui</module>
+  	<module>jbpm-enterprise-docs</module>
+  	<module>jbpm-enterprise-archetypes</module>
+  </modules>
+</project>

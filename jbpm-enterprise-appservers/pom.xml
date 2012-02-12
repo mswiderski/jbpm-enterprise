@@ -1,0 +1,16 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>jbpm-enterprise</artifactId>
+    <groupId>org.jbpm</groupId>
+    <version>0.0.1-SNAPSHOT</version>
+    <relativePath>..</relativePath>
+  </parent>
+  <artifactId>jbpm-enterprise-appservers</artifactId>
+  <name>jBPM :: enterprise-appservers</name>
+  <description>Integration points for various application servers that jbpm-enterprise supports</description>
+  <packaging>pom</packaging>
+  <modules>
+  	<module>jbpm-enterprise-jbossas7</module>
+  </modules>
+</project>

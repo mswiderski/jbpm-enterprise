@@ -1,0 +1,17 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>jbpm-enterprise</artifactId>
+    <groupId>org.jbpm</groupId>
+    <version>0.0.1-SNAPSHOT</version>
+    <relativePath>..</relativePath>
+  </parent>
+  <artifactId>jbpm-enterprise-archetypes</artifactId>
+  <packaging>pom</packaging>
+  <name>jBPM :: enterprise-archetypes</name>
+  <description>Maven archetypes to build ready to use project templates</description>
+  <modules>
+  	<module>jbpm-enterprise-bundle-archetype</module>
+  	<module>jbpm-enterprise-webapp-archetype</module>
+  </modules>
+</project>
