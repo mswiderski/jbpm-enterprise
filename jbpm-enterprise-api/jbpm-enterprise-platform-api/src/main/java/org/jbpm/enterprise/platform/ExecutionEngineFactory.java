@@ -22,7 +22,7 @@ public interface ExecutionEngineFactory {
 	 * @return ready to use instance of <code>ExecutionEngine</code>
 	 * @throws IllegalArgumentException when <code>bundleClassLoader</code> is null
 	 */
-	public ExecutionEngine buildExecutionEngine(ClassLoader bundleClassLoader);
+	public ExecutionEngine newExecutionEngine(ClassLoader bundleClassLoader);
 
 	/**
 	 * Builds <code>ExecutionEngine</code> based on supplied configuration, which disables automatic resource resolving mechanism. 
@@ -31,18 +31,18 @@ public interface ExecutionEngineFactory {
 	 * @return ready to use instance of <code>ExecutionEngine</code>
 	 * @throws IllegalArgumentException when <code>bundleClassLoader</code> is null
 	 */
-	public ExecutionEngine buildExecutionEngine(ClassLoader bundleClassLoader, ExecutionEngineConfiguration config);
+	public ExecutionEngine newExecutionEngine(ClassLoader bundleClassLoader, ExecutionEngineConfiguration config);
 
 	/**
 	 * Builds <code>ExecutionEngine</code> based on supplied configuration, which disables automatic resource resolving mechanism
 	 * and instructs the engine to use provided <code>ExecutionEngineMapperStrategy</code> instead of the default one. 
 	 * @param bundleClassLoader OSGi bundle class loader
 	 * @param config user defined <code>ExecutionEngineConfiguration</code>
-	 * @param strategy user defined <code>ExecutionEngineMapperStrategy</code>
+	 * @param callback user defined callback to receive event notifications
 	 * @return ready to use instance of <code>ExecutionEngine</code>
 	 * @throws IllegalArgumentException when <code>bundleClassLoader</code> is null
 	 */
-	public ExecutionEngine buildExecutionEngine(ClassLoader bundleClassLoader, ExecutionEngineConfiguration config, ExecutionEngineMapperStrategy strategy);
+	public ExecutionEngine newExecutionEngine(ClassLoader bundleClassLoader, ExecutionEngineConfiguration config, ExecutionEngineCallback callback);
 
 	/**
 	 * Builds <code>ExecutionEngine</code> based on supplied configuration, which disables automatic resource resolving mechanism
@@ -56,7 +56,7 @@ public interface ExecutionEngineFactory {
 	 * @return ready to use instance of <code>ExecutionEngine</code>
 	 * @throws IllegalArgumentException when <code>bundleClassLoader</code> is null
 	 */
-	public ExecutionEngine buildExecutionEngine(ClassLoader bundleClassLoader, ExecutionEngineConfiguration config, ExecutionEngineMapperStrategy strategy,
+	public ExecutionEngine newExecutionEngine(ClassLoader bundleClassLoader, ExecutionEngineConfiguration config, ExecutionEngineMapperStrategy strategy,
 			ExecutionEngineCallback callback);
 
 }
