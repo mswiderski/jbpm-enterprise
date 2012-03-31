@@ -70,4 +70,10 @@ public interface ExecutionEngine {
 	 * @return returns enhanced id with UUID of the ExecutionEngine
 	 */
 	public String buildCompositeId(String id);
+	
+	/**
+	 * Dispose given session and informs the engine about is disposal.
+	 * @param session
+	 */
+	public void disposeSession(StatefulKnowledgeSession session);
 }

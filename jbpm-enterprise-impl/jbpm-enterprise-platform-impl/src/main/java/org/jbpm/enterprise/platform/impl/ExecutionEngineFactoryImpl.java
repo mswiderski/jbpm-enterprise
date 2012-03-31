@@ -1,6 +1,7 @@
 package org.jbpm.enterprise.platform.impl;
 
 import org.drools.KnowledgeBase;
+import org.drools.util.CompositeClassLoader;
 import org.jbpm.enterprise.platform.ExecutionEngine;
 import org.jbpm.enterprise.platform.ExecutionEngineCallback;
 import org.jbpm.enterprise.platform.ExecutionEngineConfiguration;
@@ -10,34 +11,36 @@ import org.jbpm.enterprise.platform.ExecutionEngineMapperStrategy;
 public class ExecutionEngineFactoryImpl implements ExecutionEngineFactory {
 
 	public ExecutionEngine newExecutionEngine(ClassLoader bundleClassLoader) {
-		ExecutionEngineConfiguration config = null;
+		
+		DefaultExecutionEngineConfiguration config = new DefaultExecutionEngineConfiguration();
 		// TODO assemble config object based on resources on class path accessible from bundleClassLoader
-		return newExecutionEngine(bundleClassLoader, config, null, null);
+		return newExecutionEngine(buildCompositeClassloader(bundleClassLoader), config, null, null);
 	}
 
 	public ExecutionEngine newExecutionEngine(ClassLoader bundleClassLoader, ExecutionEngineConfiguration config) {
 		
-		return newExecutionEngine(bundleClassLoader, config, null, null);
+		return newExecutionEngine(buildCompositeClassloader(bundleClassLoader), config, null, null);
 	}
 
 	public ExecutionEngine newExecutionEngine(ClassLoader bundleClassLoader, ExecutionEngineConfiguration config, ExecutionEngineCallback callback) {
 		
-		return newExecutionEngine(bundleClassLoader, config, null, callback);
+		return newExecutionEngine(buildCompositeClassloader(bundleClassLoader), config, null, callback);
 	}
 
 	public ExecutionEngine newExecutionEngine(ClassLoader bundleClassLoader, ExecutionEngineConfiguration config, ExecutionEngineMapperStrategy strategy,
 			ExecutionEngineCallback callback) {
-		
-		ExecutionEngineImpl executionEngine = new ExecutionEngineImpl();
+		CompositeClassLoader compositeClassloader = buildCompositeClassloader(bundleClassLoader);
+		ExecutionEngineImpl executionEngine = new ExecutionEngineImpl(config, compositeClassloader);
 		ExecutionEngineBuilder eeBuilder = new ExecutionEngineBuilder();
+		executionEngine.setBuilder(eeBuilder);
 		
 		// build and set knowledge base
-		KnowledgeBase kBase = eeBuilder.buildKnowledgeBase(config, callback);
+		KnowledgeBase kBase = eeBuilder.buildKnowledgeBase(config, callback, compositeClassloader);
 		executionEngine.setKnowledgeBase(kBase);
 		
 		// configure strategy
 		 if (strategy == null) {
-			 strategy = new SerializedMapExecutionEngineMapperStrategy(config.getOwner(), System.getProperty("java.io.tmpdir"));
+			 strategy = new SerializedMapExecutionEngineMapperStrategy("engine", System.getProperty("java.io.tmpdir"));
 		 }
 		 executionEngine.setStrategy(strategy);
 		 
@@ -45,6 +48,16 @@ public class ExecutionEngineFactoryImpl implements ExecutionEngineFactory {
 		 executionEngine.setCallback(callback);
 		
 		return executionEngine;
+	}
+	
+	protected CompositeClassLoader buildCompositeClassloader(ClassLoader bundleClassLoader) {
+		
+		CompositeClassLoader cl = new CompositeClassLoader();
+		cl.addClassLoader(this.getClass().getClassLoader());
+		cl.addClassLoader(bundleClassLoader);
+		Thread.currentThread().setContextClassLoader(cl);
+		
+		return cl;
 	}
 
 }

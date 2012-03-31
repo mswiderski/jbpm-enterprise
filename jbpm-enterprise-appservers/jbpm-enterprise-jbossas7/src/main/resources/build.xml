@@ -1,0 +1,107 @@
+<project name="jBPM.enterprise.install">
+
+	<property file="build.properties" />
+	<property name="jboss.server.modules.dir" value="${jboss.home}/modules" />
+
+	<property name="jbpm.api.module.dir" value="${jboss.server.modules.dir}/org/jbpm/enterprise/main" />
+	<property name="jbpm.module.dir" value="${jboss.server.modules.dir}/org/jbpm/main" />
+
+	<target name="delete.modules">
+		<echo message="Deleting all jBPM enterprise modules from JBoss AS7 ..." />
+		<delete dir="${jbpm.api.module.dir}"/>		
+		<delete dir="${jbpm.module.dir}"/>
+	</target>
+	
+	<target name="prepare.module.deps">
+		<echo message="Preparing module deps..." />
+		<mkdir dir="${jbpm.api.module.dir}/tmp"/>
+		<unzip src="${jbpm.api.module.dir}/knowledge-api-5.3.2-SNAPSHOT.jar" dest="${jbpm.api.module.dir}/tmp"/>
+		<delete dir="${jbpm.api.module.dir}/tmp/META-INF/MANIFEST.MF"/>
+		<delete file="${jbpm.api.module.dir}/knowledge-api-5.3.2-SNAPSHOT.jar"/>
+		<jar destfile="${jbpm.api.module.dir}/knowledge-api-5.3.2-SNAPSHOT.jar" basedir="${jbpm.api.module.dir}/tmp" update="true"/>
+		<delete dir="${jbpm.api.module.dir}/tmp"/>
+		
+		
+		<mkdir dir="${jbpm.module.dir}/tmp"/>
+		<unzip src="${jbpm.module.dir}/drools-compiler-5.3.2-SNAPSHOT.jar" dest="${jbpm.module.dir}/tmp"/>
+		<delete dir="${jbpm.module.dir}/tmp/META-INF/MANIFEST.MF"/>
+		<delete file="${jbpm.module.dir}/drools-compiler-5.3.2-SNAPSHOT.jar"/>
+		<jar destfile="${jbpm.module.dir}/drools-compiler-5.3.2-SNAPSHOT.jar" basedir="${jbpm.module.dir}/tmp" update="true"/>
+		<delete dir="${jbpm.module.dir}/tmp"/>
+		
+		<mkdir dir="${jbpm.module.dir}/tmp"/>
+		<unzip src="${jbpm.module.dir}/drools-core-5.3.2-SNAPSHOT.jar" dest="${jbpm.module.dir}/tmp"/>
+		<delete dir="${jbpm.module.dir}/tmp/META-INF/MANIFEST.MF"/>
+		<delete file="${jbpm.module.dir}/drools-core-5.3.2-SNAPSHOT.jar"/>
+		<jar destfile="${jbpm.module.dir}/drools-core-5.3.2-SNAPSHOT.jar" basedir="${jbpm.module.dir}/tmp" update="true"/>
+		<delete dir="${jbpm.module.dir}/tmp"/>
+		
+		<mkdir dir="${jbpm.module.dir}/tmp"/>
+		<unzip src="${jbpm.module.dir}/drools-persistence-jpa-5.3.2-SNAPSHOT.jar" dest="${jbpm.module.dir}/tmp"/>
+		<delete dir="${jbpm.module.dir}/tmp/META-INF/MANIFEST.MF"/>
+		<delete file="${jbpm.module.dir}/drools-persistence-jpa-5.3.2-SNAPSHOT.jar"/>
+		<jar destfile="${jbpm.module.dir}/drools-persistence-jpa-5.3.2-SNAPSHOT.jar" basedir="${jbpm.module.dir}/tmp" update="true"/>
+		<delete dir="${jbpm.module.dir}/tmp"/>
+	</target>
+	
+	<target name="install.api.module">
+		<echo message="Installing jBPM enterprise api module into JBoss AS7 ..." />
+		<mkdir dir="${jbpm.api.module.dir}"/>
+		<copy todir="${jbpm.api.module.dir}">
+			<fileset dir="platform-api">
+				<include name="module.xml"/>
+				<include name="jbosgi-xservice.properties"/>
+			</fileset>
+			<fileset dir="${platform.api.dir}">
+				<include name="**/*.jar" />
+			</fileset>
+		</copy>
+		<copy todir="${jbpm.api.module.dir}" file="${jbpm.bin.dir}/org/drools/knowledge-api/5.3.2-SNAPSHOT/knowledge-api-5.3.2-SNAPSHOT.jar" />
+	</target>
+
+	<target name="install.impl.module">
+		<!--echo message="Installing jBPM enterprise impl module into JBoss AS7 ..." />
+		<mkdir dir="${jbpm.impl.module.dir}"/>
+		<copy todir="${jbpm.impl.module.dir}">
+			<fileset dir="platform-impl">
+				<include name="module.xml"/>
+				<include name="jbosgi-xservice.properties"/>
+			</fileset>
+			<fileset dir="${platform.impl.dir}">
+				<include name="**/*.jar" />
+			</fileset>
+		</copy-->
+	</target>
+	<target name="install.jbpm.module">
+		<echo message="Installing jBPM module into JBoss AS7 ..." />
+		<mkdir dir="${jbpm.module.dir}"/>
+		<copy todir="${jbpm.module.dir}" >
+			<fileset dir="jbpm">
+				<include name="module.xml"/>
+				<include name="jbosgi-xservice.properties"/>
+			</fileset>
+		</copy>
+		<copy todir="${jbpm.module.dir}">
+			<fileset dir="${platform.impl.dir}">
+				<include name="**/*.jar" />
+			</fileset>
+		</copy>
+		<copy todir="${jbpm.module.dir}" file="${jbpm.bin.dir}/org/drools/drools-compiler/5.3.2-SNAPSHOT/drools-compiler-5.3.2-SNAPSHOT.jar" />
+		<copy todir="${jbpm.module.dir}" file="${jbpm.bin.dir}/org/drools/drools-core/5.3.2-SNAPSHOT/drools-core-5.3.2-SNAPSHOT.jar" />
+		<copy todir="${jbpm.module.dir}" file="${jbpm.bin.dir}/org/drools/drools-persistence-jpa/5.3.2-SNAPSHOT/drools-persistence-jpa-5.3.2-SNAPSHOT.jar" />
+		<copy todir="${jbpm.module.dir}" file="${jbpm.bin.dir}/org/jbpm/jbpm-tm/jbpm-tm.jar" />
+		<copy todir="${jbpm.module.dir}" file="${jbpm.bin.dir}/org/jbpm/jbpm-bam/5.3.0-SNAPSHOT/jbpm-bam-5.3.0-SNAPSHOT.jar" />
+		<copy todir="${jbpm.module.dir}" file="${jbpm.bin.dir}/org/jbpm/jbpm-bpmn2/5.3.0-SNAPSHOT/jbpm-bpmn2-5.3.0-SNAPSHOT.jar" />
+		<copy todir="${jbpm.module.dir}" file="${jbpm.bin.dir}/org/jbpm/jbpm-flow/5.3.0-SNAPSHOT/jbpm-flow-5.3.0-SNAPSHOT.jar" />
+		<copy todir="${jbpm.module.dir}" file="${jbpm.bin.dir}/org/jbpm/jbpm-flow-builder/5.3.0-SNAPSHOT/jbpm-flow-builder-5.3.0-SNAPSHOT.jar" />
+		<copy todir="${jbpm.module.dir}" file="${jbpm.bin.dir}/org/jbpm/jbpm-persistence-jpa/5.3.0-SNAPSHOT/jbpm-persistence-jpa-5.3.0-SNAPSHOT.jar" />
+		<copy todir="${jbpm.module.dir}" file="${jbpm.bin.dir}/org/jbpm/jbpm-workitems/5.3.0-SNAPSHOT/jbpm-workitems-5.3.0-SNAPSHOT.jar" />
+		<copy todir="${jbpm.module.dir}" file="${jbpm.bin.dir}/org/jbpm/jbpm-human-task/5.3.0-SNAPSHOT/jbpm-human-task-5.3.0-SNAPSHOT.jar" />				
+		<copy todir="${jbpm.module.dir}" file="${jbpm.bin.dir}/com/thoughtworks/xstream/xstream/1.4.1/xstream-1.4.1.jar" />
+		<copy tofile="${jbpm.module.dir}/mvel2-2.1.0.jar" file="${jbpm.bin.dir}/org/mvel/mvel2/2.1.0.drools8/mvel2-2.1.0.drools8.jar" />
+		<copy todir="${jbpm.module.dir}" file="${jbpm.bin.dir}/org/apache/mina/mina-core/2.0.1/mina-core-2.0.1.jar" />
+		<copy todir="${jbpm.module.dir}" file="${jbpm.bin.dir}/org/antlr/antlr-runtime/3.3/antlr-runtime-3.3.jar" />
+		<copy todir="${jbpm.module.dir}" file="${jbpm.bin.dir}/org/antlr/antlr/3.3/antlr-3.3.jar" />
+		<copy todir="${jbpm.module.dir}" file="${jbpm.bin.dir}/org/eclipse/jdt/core/compiler/ecj/3.5.1/ecj-3.5.1.jar" />
+	</target>
+</project>

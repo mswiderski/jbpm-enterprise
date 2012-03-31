@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app xmlns:javaee="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+  <display-name>Demo jBPM enterprise Web Application</display-name>
+  <servlet>
+    <description></description>
+    <display-name>OSGiServlet</display-name>
+    <servlet-name>OSGiServlet</servlet-name>
+    <servlet-class>${groupId}.OSGiServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>OSGiServlet</servlet-name>
+    <url-pattern>/osgi</url-pattern>
+  </servlet-mapping>
+</web-app>

@@ -19,10 +19,15 @@ public class ExecutionEngineImpl implements ExecutionEngine {
 	protected ExecutionEngineMapperStrategy strategy;
 	protected ExecutionEngineCallback callback;
 	protected ExecutionEngineConfiguration config;
-	
+	protected ClassLoader bundleClassLoader;
 	protected ExecutionEngineBuilder builder;
 	
 	protected Map<Integer, StatefulKnowledgeSession> localCache = new ConcurrentHashMap<Integer, StatefulKnowledgeSession>();
+	
+	public ExecutionEngineImpl(ExecutionEngineConfiguration config, ClassLoader bundleClassLoader) {
+		this.config = config;
+		this.bundleClassLoader = bundleClassLoader;
+	}
 	
 	public ExecutionEngineCallback getCallback() {
 		return callback;
@@ -51,23 +56,26 @@ public class ExecutionEngineImpl implements ExecutionEngine {
 	}
 
 	public StatelessKnowledgeSession getStatelessSession() {
-		
+		configureClassLoader();
 		return this.knowledgeBase.newStatelessKnowledgeSession();
 	}
 
 	public StatefulKnowledgeSession getSession(String businessKey) {
+		configureClassLoader();
 		int internalId = strategy.resolveIdByBusinessKey(businessKey);
 		if (internalId == -1) {
-			StatefulKnowledgeSession session = builder.retrieveSession(this.config, callback, strategy, businessKey, this.knowledgeBase);
-			localCache.put(session.getId(), session);
+			StatefulKnowledgeSession session = builder.retrieveSession(this.config, callback, strategy, businessKey, this.knowledgeBase, this.bundleClassLoader);
+			SessionDelegateImpl delegate = new SessionDelegateImpl(session, this);
+			localCache.put(session.getId(), delegate);
 			
-			return session;
+			return delegate;
 		} else {
 			return localCache.get(internalId);
 		}
 	}
 
 	public StatefulKnowledgeSession getSessionById(int id) {
+		configureClassLoader();
 		if (localCache.containsKey(id)) {
 			return localCache.get(id);
 		}
@@ -76,13 +84,14 @@ public class ExecutionEngineImpl implements ExecutionEngine {
 	}
 
 	public Object getHumanTaskConnector() {
+		configureClassLoader();
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public UUID getUUID() {
-		// TODO Auto-generated method stub
-		return null;
+		// TODO make it unique regardless of restarts
+		return UUID.randomUUID();
 	}
 
 	public String buildCompositeId(ProcessInstance instance) {
@@ -101,6 +110,18 @@ public class ExecutionEngineImpl implements ExecutionEngine {
 
 	public void setBuilder(ExecutionEngineBuilder builder) {
 		this.builder = builder;
+	}
+
+	public void disposeSession(StatefulKnowledgeSession session) {
+		configureClassLoader();
+		this.localCache.remove(session.getId());
+		session.dispose();
+		
+	}
+	
+	protected void configureClassLoader() {
+		// set context class loader to allow CompositeClassLoader of Drools and jBPM to locate classes
+		Thread.currentThread().setContextClassLoader(this.bundleClassLoader);
 	}
 
 }

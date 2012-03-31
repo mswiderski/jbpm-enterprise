@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>${groupId}</groupId>
+  <artifactId>${artifactId}</artifactId>
+  <version>${version}</version>
+  
+  <!-- Include the JBoss Maven repository so we can access JBoss artifacts -->
+	<repositories>
+		<repository>
+			<id>jboss-public-repository</id>
+			<name>JBoss Repository</name>
+			<url>https://repository.jboss.org/nexus/content/groups/public</url>
+			<releases>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>jboss-public-repository</id>
+			<name>JBoss Repository</name>
+			<url>https://repository.jboss.org/nexus/content/groups/public</url>
+			<releases>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.core</artifactId>
+			<version>4.3.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jbpm</groupId>
+			<artifactId>jbpm-enterprise-platform-api</artifactId>
+			<version>${platformApi}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jbpm</groupId>
+			<artifactId>jbpm-enterprise-platform-impl</artifactId>
+			<version>${platformImpl}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.8.1</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<!-- This plugin takes care of packaging the artifact as an OSGi Bundle -->
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<version>2.3.4</version>
+				<extensions>true</extensions>
+				<configuration>
+					<instructions>
+						<!-- OSGi Manifest Metadata is specified here -->
+						<!-- The Bundle SymbolicName is the same as the artifact ID -->
+						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+
+						<!-- Specify the Bundle activator, which is invoked when the Bundle 
+							is started -->
+						<Bundle-Activator>org.jbpm.enterprise.bundle.JbpmBundleActivator</Bundle-Activator>
+
+						<!-- Automatically compute all the necessary Import-Package statements -->
+						<Import-Package>org.osgi.framework,javax.naming,javax.persistence,org.drools.*,org.jbpm.*,org.hibernate.*,javassist.*</Import-Package>
+
+						<!-- This bundle does not export any packages -->
+						<Export-Package></Export-Package>
+
+						<!-- Packages that are not exported but need to be included need to 
+							be listed as Private-Package -->
+						<Private-Package></Private-Package>
+					</instructions>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

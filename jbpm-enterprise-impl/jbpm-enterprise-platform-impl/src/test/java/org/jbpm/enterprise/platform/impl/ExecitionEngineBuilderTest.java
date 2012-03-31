@@ -37,7 +37,7 @@ public class ExecitionEngineBuilderTest {
 		ExecutionEngineConfiguration config = new DefaultExecutionEngineConfiguration();
 		config.addResource(ResourceFactory.newClassPathResource("BPMN2-ScriptTask.bpmn2"), ResourceType.BPMN2);
 		
-		KnowledgeBase kbase = builder.buildKnowledgeBase(config, null);
+		KnowledgeBase kbase = builder.buildKnowledgeBase(config, null, this.getClass().getClassLoader());
 		assertNotNull(kbase);
 		assertEquals(1, kbase.getKnowledgePackages().size());
 		assertEquals(1, kbase.getProcesses().size());
@@ -49,7 +49,7 @@ public class ExecitionEngineBuilderTest {
 		ExecutionEngineConfiguration config = new DefaultExecutionEngineConfiguration();
 		config.addResource(ResourceFactory.newClassPathResource("does-not-exist.bpmn2"), ResourceType.BPMN2);
 		
-		KnowledgeBase kbase = builder.buildKnowledgeBase(config, null);
+		KnowledgeBase kbase = builder.buildKnowledgeBase(config, null, this.getClass().getClassLoader());
 		fail("Build of knowledge base should fail as resource does not exist" + kbase);
 	}
 	
@@ -60,9 +60,9 @@ public class ExecitionEngineBuilderTest {
 		ExecutionEngineConfiguration config = new DefaultExecutionEngineConfiguration();
 		config.addResource(ResourceFactory.newClassPathResource("BPMN2-ScriptTask.bpmn2"), ResourceType.BPMN2);
 		
-		KnowledgeBase kbase = builder.buildKnowledgeBase(config, null);
+		KnowledgeBase kbase = builder.buildKnowledgeBase(config, null, this.getClass().getClassLoader());
 		ExecutionEngineMapperStrategy strategy = new SerializedMapExecutionEngineMapperStrategy("test", System.getProperty("java.io.tmpdir"));
-		StatefulKnowledgeSession session = builder.retrieveSession(config, null, strategy, "testBaseKey", kbase);
+		StatefulKnowledgeSession session = builder.retrieveSession(config, null, strategy, "testBaseKey", kbase, this.getClass().getClassLoader());
 		assertNotNull(session);
 	}
 	
@@ -74,9 +74,9 @@ public class ExecitionEngineBuilderTest {
 		config.addResource(ResourceFactory.newClassPathResource("BPMN2-ScriptTask.bpmn2"), ResourceType.BPMN2);
 		config.setPersistenceUnit("org.jbpm.persistence.jpa");
 		
-		KnowledgeBase kbase = builder.buildKnowledgeBase(config, null);
+		KnowledgeBase kbase = builder.buildKnowledgeBase(config, null, this.getClass().getClassLoader());
 		ExecutionEngineMapperStrategy strategy = new SerializedMapExecutionEngineMapperStrategy("test", System.getProperty("java.io.tmpdir"));
-		StatefulKnowledgeSession session = builder.retrieveSession(config, null, strategy, "testBaseKey", kbase);
+		StatefulKnowledgeSession session = builder.retrieveSession(config, null, strategy, "testBaseKey", kbase, this.getClass().getClassLoader());
 		assertNotNull(session);
 	}
 }

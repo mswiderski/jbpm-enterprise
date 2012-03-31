@@ -1,6 +1,6 @@
 package org.jbpm.enterprise.platform;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.UUID;
 
 /**
@@ -41,8 +41,8 @@ public interface ExecutionEngineResolverManager {
 	public ExecutionEngine findAndLookUp(RequestContext context);
 	
 	/**
-	 * Returns list of all registered resolvers. The list should be read only.
-	 * @return list of registered resolvers.
+	 * Returns collection of all registered resolvers. The list should be read only.
+	 * @return collection of registered resolvers.
 	 */
-	public List<ExecutionEngineResolver> getResolvers();
+	public Collection<ExecutionEngineResolver> getResolvers();
 }
