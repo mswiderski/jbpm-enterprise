@@ -4,6 +4,7 @@
   <groupId>${groupId}</groupId>
   <artifactId>${artifactId}</artifactId>
   <version>${version}</version>
+  <packaging>bundle</packaging>
   
   <!-- Include the JBoss Maven repository so we can access JBoss artifacts -->
 	<repositories>
@@ -36,19 +37,20 @@
 		<dependency>
 			<groupId>org.osgi</groupId>
 			<artifactId>org.osgi.core</artifactId>
-			<version>4.3.0</version>
+			<version>4.2.0</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.jbpm</groupId>
 			<artifactId>jbpm-enterprise-platform-api</artifactId>
 			<version>${platformApi}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.jbpm</groupId>
 			<artifactId>jbpm-enterprise-platform-impl</artifactId>
 			<version>${platformImpl}</version>
-			<scope>runtime</scope>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -77,10 +79,11 @@
 						<Bundle-Activator>org.jbpm.enterprise.bundle.JbpmBundleActivator</Bundle-Activator>
 
 						<!-- Automatically compute all the necessary Import-Package statements -->
-						<Import-Package>org.osgi.framework,javax.naming,javax.persistence,org.drools.*,org.jbpm.*,org.hibernate.*,javassist.*</Import-Package>
+						<Import-Package>org.osgi.framework,javax.naming,javax.persistence,org.drools.*,org.jbpm.*,
+						org.jbpm.enterprise.platform.impl,org.jbpm.enterprise.platform</Import-Package>
 
 						<!-- This bundle does not export any packages -->
-						<Export-Package></Export-Package>
+						<Export-Package>org.jbpm.enterprise.bundle</Export-Package>
 
 						<!-- Packages that are not exported but need to be included need to 
 							be listed as Private-Package -->

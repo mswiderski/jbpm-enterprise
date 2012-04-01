@@ -60,12 +60,4 @@ public class JbpmBundleActivator implements BundleActivator {
 		}
 		
 	}
-	
-	protected void configureCompositeClassloader(ExecutionEngineFactory eeFactory, ClassLoader bundleClassLoader) {
-		
-		CompositeClassLoader cl = new CompositeClassLoader();
-		cl.addClassLoader(eeFactory.getClass().getClassLoader());
-		cl.addClassLoader(bundleClassLoader);
-		Thread.currentThread().setContextClassLoader(cl);
-	}
 }
