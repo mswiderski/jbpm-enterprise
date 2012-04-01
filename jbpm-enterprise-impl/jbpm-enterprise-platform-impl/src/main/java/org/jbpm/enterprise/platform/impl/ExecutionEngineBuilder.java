@@ -16,6 +16,7 @@ import org.drools.builder.KnowledgeBuilderConfiguration;
 import org.drools.builder.KnowledgeBuilderFactory;
 import org.drools.builder.ResourceType;
 import org.drools.io.Resource;
+import org.drools.io.ResourceFactory;
 import org.drools.persistence.jpa.JPAKnowledgeService;
 import org.drools.runtime.Environment;
 import org.drools.runtime.EnvironmentName;
@@ -39,11 +40,23 @@ public class ExecutionEngineBuilder {
 			callback.preKnowledgeBaseCreate(builder);
 		}
 		Map<Resource, ResourceType> resources = config.getResources();
-		Iterator<Resource> it = resources.keySet().iterator();
-		while (it.hasNext()) {
-			Resource resource = (Resource) it.next();
-			builder.add(resource, resources.get(resource));
+		if (resources != null) {
+			Iterator<Resource> it = resources.keySet().iterator();
+			while (it.hasNext()) {
+				Resource resource = (Resource) it.next();
+				builder.add(resource, resources.get(resource));
+			}
 		}
+		
+		if (config.getChangeSet() != null) {
+			if (config.getChangeSet().startsWith("classpath:")) {
+				String classPathResource = config.getChangeSet().replaceFirst("classpath:", "");
+				builder.add(ResourceFactory.newClassPathResource(classPathResource), ResourceType.CHANGE_SET);
+			} else {
+				builder.add(ResourceFactory.newUrlResource(config.getChangeSet()), ResourceType.CHANGE_SET);
+			}			
+		}
+		
 		KnowledgeBase kBase = builder.newKnowledgeBase();
 		
 		if (builder.hasErrors()) {

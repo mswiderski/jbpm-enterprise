@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
+import java.io.File;
+
 import org.drools.KnowledgeBase;
 import org.drools.builder.ResourceType;
 import org.drools.io.ResourceFactory;
@@ -72,6 +74,58 @@ public class ExecitionEngineBuilderTest {
 		ExecutionEngineBuilder builder = new ExecutionEngineBuilder();
 		DefaultExecutionEngineConfiguration config = new DefaultExecutionEngineConfiguration();
 		config.addResource(ResourceFactory.newClassPathResource("BPMN2-ScriptTask.bpmn2"), ResourceType.BPMN2);
+		config.setPersistenceUnit("org.jbpm.persistence.jpa");
+		
+		KnowledgeBase kbase = builder.buildKnowledgeBase(config, null, this.getClass().getClassLoader());
+		ExecutionEngineMapperStrategy strategy = new SerializedMapExecutionEngineMapperStrategy("test", System.getProperty("java.io.tmpdir"));
+		StatefulKnowledgeSession session = builder.retrieveSession(config, null, strategy, "testBaseKey", kbase, this.getClass().getClassLoader());
+		assertNotNull(session);
+	}
+	
+	@Test
+	public void testCreateKnowledgeBaseFromClasspathChangeset() {
+		ExecutionEngineBuilder builder = new ExecutionEngineBuilder();
+		ExecutionEngineConfiguration config = new DefaultExecutionEngineConfiguration();
+		config.setChangeSet("classpath:ChangeSet.xml");
+		
+		KnowledgeBase kbase = builder.buildKnowledgeBase(config, null, this.getClass().getClassLoader());
+		assertNotNull(kbase);
+		assertEquals(1, kbase.getKnowledgePackages().size());
+		assertEquals(1, kbase.getProcesses().size());
+	}
+	
+	@Test
+	public void testCreateKnowledgeBaseFromFileChangeset() {
+		ExecutionEngineBuilder builder = new ExecutionEngineBuilder();
+		ExecutionEngineConfiguration config = new DefaultExecutionEngineConfiguration();
+		String dir = System.getProperty( "user.dir") + File.separator + "src" + File.separator + "test" + File.separator + "resources" + File.separator;
+		config.setChangeSet("file:" + dir + "ChangeSet.xml");
+		
+		KnowledgeBase kbase = builder.buildKnowledgeBase(config, null, this.getClass().getClassLoader());
+		assertNotNull(kbase);
+		assertEquals(1, kbase.getKnowledgePackages().size());
+		assertEquals(1, kbase.getProcesses().size());
+	}
+	
+	@Test
+	public void testRetrieveStatefulSessionNoPersistenceFromChangeSet() {
+		
+		ExecutionEngineBuilder builder = new ExecutionEngineBuilder();
+		ExecutionEngineConfiguration config = new DefaultExecutionEngineConfiguration();
+		config.setChangeSet("classpath:ChangeSet.xml");
+		
+		KnowledgeBase kbase = builder.buildKnowledgeBase(config, null, this.getClass().getClassLoader());
+		ExecutionEngineMapperStrategy strategy = new SerializedMapExecutionEngineMapperStrategy("test", System.getProperty("java.io.tmpdir"));
+		StatefulKnowledgeSession session = builder.retrieveSession(config, null, strategy, "testBaseKey", kbase, this.getClass().getClassLoader());
+		assertNotNull(session);
+	}
+	
+	@Test
+	public void testRetrieveStatefulSessionPersistenceFromChangeSet() {
+		
+		ExecutionEngineBuilder builder = new ExecutionEngineBuilder();
+		DefaultExecutionEngineConfiguration config = new DefaultExecutionEngineConfiguration();
+		config.setChangeSet("classpath:ChangeSet.xml");
 		config.setPersistenceUnit("org.jbpm.persistence.jpa");
 		
 		KnowledgeBase kbase = builder.buildKnowledgeBase(config, null, this.getClass().getClassLoader());

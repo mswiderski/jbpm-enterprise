@@ -7,9 +7,6 @@ import java.util.Calendar;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
-import org.drools.builder.ResourceType;
-import org.drools.io.ResourceFactory;
-import org.drools.util.CompositeClassLoader;
 import org.jbpm.enterprise.platform.ExecutionEngine;
 import org.jbpm.enterprise.platform.ExecutionEngineFactory;
 import org.jbpm.enterprise.platform.impl.DefaultExecutionEngineConfiguration;
@@ -37,23 +34,21 @@ public class JbpmBundleActivator implements BundleActivator {
 		} else {
 			throw new IllegalStateException("ExecutionEngineFactory not found in OSGi registry using filter " + filter);
 		}
-		configureCompositeClassloader(eeFactory, this.getClass().getClassLoader());
-//		DefaultExecutionEngineConfiguration config = new DefaultExecutionEngineConfiguration();
-		config.addResource(ResourceFactory.newClassPathResource("your-process.bpmn2"), ResourceType.BPMN2);
-		
+
+		DefaultExecutionEngineConfiguration config = new DefaultExecutionEngineConfiguration();
+		config.setChangeSet("classpath:ChangeSet.xml");
 		ExecutionEngine engine = eeFactory.newExecutionEngine(this.getClass().getClassLoader(), config);
 		
-		Dictionary<String, String> properties = new Hashtable<String, String>();
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
 		// register with version number for resolution based on version
 		properties.put("version", context.getBundle().getVersion().toString());
-		
 		//register with valid time to be automatically selected based on current time (time must be given as milliseconds)
 		// just as an example valid for two days from now
 		Calendar cal = Calendar.getInstance();
 		
-		properties.put("validFrom", Long.toString(cal.getTimeInMillis()));
+		properties.put("validFrom", cal.getTimeInMillis());
 		cal.add(Calendar.DAY_OF_YEAR, 2);
-		properties.put("validTo", Long.toString(cal.getTimeInMillis()));
+		properties.put("validTo", cal.getTimeInMillis());
 		// register it in OSGi service registry
 		registeredEngine = context.registerService(ExecutionEngine.class.getName(), engine, properties);
 	}

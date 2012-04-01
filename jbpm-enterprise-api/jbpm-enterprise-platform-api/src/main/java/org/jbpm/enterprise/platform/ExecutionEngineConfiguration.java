@@ -30,4 +30,8 @@ public interface ExecutionEngineConfiguration {
 	public void setResources(Map<Resource, ResourceType> resources);
 	
 	public Map<Resource, ResourceType> getResources(); 
+	
+	public void setChangeSet(String changesetLocation);
+	
+	public String getChangeSet();
 }
