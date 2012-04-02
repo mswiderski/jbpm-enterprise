@@ -22,8 +22,7 @@
   -->
 <module xmlns="urn:jboss:module:1.1" name="org.jbpm.enterprise">
 
-    <resources>
-        <resource-root path="knowledge-api-5.3.2-SNAPSHOT.jar"/>
+    <resources>        
         <resource-root path="jbpm-enterprise-platform-api-0.0.1-SNAPSHOT.jar"/>
         <!-- Insert resources here -->
         

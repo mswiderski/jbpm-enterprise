@@ -6,12 +6,12 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.drools.KnowledgeBase;
 import org.drools.runtime.StatefulKnowledgeSession;
-import org.drools.runtime.StatelessKnowledgeSession;
 import org.drools.runtime.process.ProcessInstance;
 import org.jbpm.enterprise.platform.ExecutionEngine;
 import org.jbpm.enterprise.platform.ExecutionEngineCallback;
 import org.jbpm.enterprise.platform.ExecutionEngineConfiguration;
 import org.jbpm.enterprise.platform.ExecutionEngineMapperStrategy;
+import org.jbpm.enterprise.platform.SessionDelegate;
 
 public class ExecutionEngineImpl implements ExecutionEngine {
 
@@ -22,7 +22,7 @@ public class ExecutionEngineImpl implements ExecutionEngine {
 	protected ClassLoader bundleClassLoader;
 	protected ExecutionEngineBuilder builder;
 	
-	protected Map<Integer, StatefulKnowledgeSession> localCache = new ConcurrentHashMap<Integer, StatefulKnowledgeSession>();
+	protected Map<Integer, SessionDelegate> localCache = new ConcurrentHashMap<Integer, SessionDelegate>();
 	
 	public ExecutionEngineImpl(ExecutionEngineConfiguration config, ClassLoader bundleClassLoader) {
 		this.config = config;
@@ -55,36 +55,32 @@ public class ExecutionEngineImpl implements ExecutionEngine {
 		return this.knowledgeBase;
 	}
 
-	public StatelessKnowledgeSession getStatelessSession() {
-		configureClassLoader();
-		return this.knowledgeBase.newStatelessKnowledgeSession();
+	public SessionDelegate getStatelessSession() {
+		return new StatelessSessionDelegateImpl(this.knowledgeBase.newStatelessKnowledgeSession());
 	}
 
-	public StatefulKnowledgeSession getSession(String businessKey) {
-		configureClassLoader();
+	public SessionDelegate getSession(String businessKey) {
 		int internalId = strategy.resolveIdByBusinessKey(businessKey);
 		if (internalId == -1) {
 			StatefulKnowledgeSession session = builder.retrieveSession(this.config, callback, strategy, businessKey, this.knowledgeBase, this.bundleClassLoader);
-			SessionDelegateImpl delegate = new SessionDelegateImpl(session, this);
+			StatefulSessionDelegateImpl delegate = new StatefulSessionDelegateImpl(session, this);
 			localCache.put(session.getId(), delegate);
 			
 			return delegate;
 		} else {
-			return localCache.get(internalId);
+			return (SessionDelegate) localCache.get(internalId);
 		}
 	}
 
-	public StatefulKnowledgeSession getSessionById(int id) {
-		configureClassLoader();
+	public SessionDelegate getSessionById(int id) {
 		if (localCache.containsKey(id)) {
-			return localCache.get(id);
+			return (SessionDelegate) localCache.get(id);
 		}
 		
 		return null;
 	}
 
 	public Object getHumanTaskConnector() {
-		configureClassLoader();
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -112,16 +108,15 @@ public class ExecutionEngineImpl implements ExecutionEngine {
 		this.builder = builder;
 	}
 
-	public void disposeSession(StatefulKnowledgeSession session) {
-		configureClassLoader();
-		this.localCache.remove(session.getId());
-		session.dispose();
+	public void disposeSession(SessionDelegate session) {
+		disposeSession((StatefulKnowledgeSession)session.getDelegate());
 		
 	}
 	
-	protected void configureClassLoader() {
-		// set context class loader to allow CompositeClassLoader of Drools and jBPM to locate classes
-		Thread.currentThread().setContextClassLoader(this.bundleClassLoader);
+	public void disposeSession(StatefulKnowledgeSession session) {
+		this.localCache.remove(session.getId());
+		session.dispose();
+		
 	}
 
 }

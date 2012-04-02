@@ -14,28 +14,28 @@ public class ExecutionEngineFactoryImpl implements ExecutionEngineFactory {
 		
 		DefaultExecutionEngineConfiguration config = new DefaultExecutionEngineConfiguration();
 		// TODO assemble config object based on resources on class path accessible from bundleClassLoader
-		return newExecutionEngine(buildCompositeClassloader(bundleClassLoader), config, null, null);
+		return newExecutionEngine(bundleClassLoader, config, null, null);
 	}
 
 	public ExecutionEngine newExecutionEngine(ClassLoader bundleClassLoader, ExecutionEngineConfiguration config) {
 		
-		return newExecutionEngine(buildCompositeClassloader(bundleClassLoader), config, null, null);
+		return newExecutionEngine(bundleClassLoader, config, null, null);
 	}
 
-	public ExecutionEngine newExecutionEngine(ClassLoader bundleClassLoader, ExecutionEngineConfiguration config, ExecutionEngineCallback callback) {
+	public ExecutionEngine newExecutionEngine(ClassLoader bundleClassLoader, ExecutionEngineConfiguration config, Object callback) {
 		
-		return newExecutionEngine(buildCompositeClassloader(bundleClassLoader), config, null, callback);
+		return newExecutionEngine(bundleClassLoader, config, null, callback);
 	}
 
 	public ExecutionEngine newExecutionEngine(ClassLoader bundleClassLoader, ExecutionEngineConfiguration config, ExecutionEngineMapperStrategy strategy,
-			ExecutionEngineCallback callback) {
+			Object callback) {
 		CompositeClassLoader compositeClassloader = buildCompositeClassloader(bundleClassLoader);
 		ExecutionEngineImpl executionEngine = new ExecutionEngineImpl(config, compositeClassloader);
 		ExecutionEngineBuilder eeBuilder = new ExecutionEngineBuilder();
 		executionEngine.setBuilder(eeBuilder);
 		
 		// build and set knowledge base
-		KnowledgeBase kBase = eeBuilder.buildKnowledgeBase(config, callback, compositeClassloader);
+		KnowledgeBase kBase = eeBuilder.buildKnowledgeBase(config, (ExecutionEngineCallback) callback, compositeClassloader);
 		executionEngine.setKnowledgeBase(kBase);
 		
 		// configure strategy
@@ -45,13 +45,16 @@ public class ExecutionEngineFactoryImpl implements ExecutionEngineFactory {
 		 executionEngine.setStrategy(strategy);
 		 
 		 // configure callback
-		 executionEngine.setCallback(callback);
+		 executionEngine.setCallback((ExecutionEngineCallback) callback);
 		
 		return executionEngine;
 	}
 	
 	protected CompositeClassLoader buildCompositeClassloader(ClassLoader bundleClassLoader) {
 		
+		if (bundleClassLoader instanceof CompositeClassLoader) {
+			return (CompositeClassLoader) bundleClassLoader;
+		}
 		CompositeClassLoader cl = new CompositeClassLoader();
 		cl.addClassLoader(this.getClass().getClassLoader());
 		cl.addClassLoader(bundleClassLoader);

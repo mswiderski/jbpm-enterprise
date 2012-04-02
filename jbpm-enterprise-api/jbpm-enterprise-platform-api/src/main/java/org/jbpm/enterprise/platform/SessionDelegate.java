@@ -1,8 +1,13 @@
 package org.jbpm.enterprise.platform;
 
-import org.drools.runtime.StatefulKnowledgeSession;
 
-public interface SessionDelegate extends StatefulKnowledgeSession {
+public interface SessionDelegate  {
 
-	public StatefulKnowledgeSession getDelegate();
+	public Object getDelegate();
+	
+	public long startProcess(String id);
+	
+	public int getId();
+	
+	public void dispose();
 }

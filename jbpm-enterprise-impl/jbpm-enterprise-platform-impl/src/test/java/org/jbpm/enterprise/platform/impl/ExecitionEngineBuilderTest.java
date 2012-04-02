@@ -7,8 +7,6 @@ import static org.junit.Assert.fail;
 import java.io.File;
 
 import org.drools.KnowledgeBase;
-import org.drools.builder.ResourceType;
-import org.drools.io.ResourceFactory;
 import org.drools.runtime.StatefulKnowledgeSession;
 import org.jbpm.enterprise.platform.ExecutionEngineConfiguration;
 import org.jbpm.enterprise.platform.ExecutionEngineMapperStrategy;
@@ -34,55 +32,6 @@ public class ExecitionEngineBuilderTest {
 	}
 
 	@Test
-	public void testCreateKnowledgeBase() {
-		ExecutionEngineBuilder builder = new ExecutionEngineBuilder();
-		ExecutionEngineConfiguration config = new DefaultExecutionEngineConfiguration();
-		config.addResource(ResourceFactory.newClassPathResource("BPMN2-ScriptTask.bpmn2"), ResourceType.BPMN2);
-		
-		KnowledgeBase kbase = builder.buildKnowledgeBase(config, null, this.getClass().getClassLoader());
-		assertNotNull(kbase);
-		assertEquals(1, kbase.getKnowledgePackages().size());
-		assertEquals(1, kbase.getProcesses().size());
-	}
-	
-	@Test(expected=RuntimeException.class)
-	public void testCreateKnowledgeBaseCorrupted() {
-		ExecutionEngineBuilder builder = new ExecutionEngineBuilder();
-		ExecutionEngineConfiguration config = new DefaultExecutionEngineConfiguration();
-		config.addResource(ResourceFactory.newClassPathResource("does-not-exist.bpmn2"), ResourceType.BPMN2);
-		
-		KnowledgeBase kbase = builder.buildKnowledgeBase(config, null, this.getClass().getClassLoader());
-		fail("Build of knowledge base should fail as resource does not exist" + kbase);
-	}
-	
-	@Test
-	public void testRetrieveStatefulSessionNoPersistence() {
-		
-		ExecutionEngineBuilder builder = new ExecutionEngineBuilder();
-		ExecutionEngineConfiguration config = new DefaultExecutionEngineConfiguration();
-		config.addResource(ResourceFactory.newClassPathResource("BPMN2-ScriptTask.bpmn2"), ResourceType.BPMN2);
-		
-		KnowledgeBase kbase = builder.buildKnowledgeBase(config, null, this.getClass().getClassLoader());
-		ExecutionEngineMapperStrategy strategy = new SerializedMapExecutionEngineMapperStrategy("test", System.getProperty("java.io.tmpdir"));
-		StatefulKnowledgeSession session = builder.retrieveSession(config, null, strategy, "testBaseKey", kbase, this.getClass().getClassLoader());
-		assertNotNull(session);
-	}
-	
-	@Test
-	public void testRetrieveStatefulSessionPersistence() {
-		
-		ExecutionEngineBuilder builder = new ExecutionEngineBuilder();
-		DefaultExecutionEngineConfiguration config = new DefaultExecutionEngineConfiguration();
-		config.addResource(ResourceFactory.newClassPathResource("BPMN2-ScriptTask.bpmn2"), ResourceType.BPMN2);
-		config.setPersistenceUnit("org.jbpm.persistence.jpa");
-		
-		KnowledgeBase kbase = builder.buildKnowledgeBase(config, null, this.getClass().getClassLoader());
-		ExecutionEngineMapperStrategy strategy = new SerializedMapExecutionEngineMapperStrategy("test", System.getProperty("java.io.tmpdir"));
-		StatefulKnowledgeSession session = builder.retrieveSession(config, null, strategy, "testBaseKey", kbase, this.getClass().getClassLoader());
-		assertNotNull(session);
-	}
-	
-	@Test
 	public void testCreateKnowledgeBaseFromClasspathChangeset() {
 		ExecutionEngineBuilder builder = new ExecutionEngineBuilder();
 		ExecutionEngineConfiguration config = new DefaultExecutionEngineConfiguration();
@@ -106,12 +55,22 @@ public class ExecitionEngineBuilderTest {
 		assertEquals(1, kbase.getKnowledgePackages().size());
 		assertEquals(1, kbase.getProcesses().size());
 	}
+
+	@Test(expected=RuntimeException.class)
+	public void testCreateKnowledgeBaseCorrupted() {
+		ExecutionEngineBuilder builder = new ExecutionEngineBuilder();
+		DefaultExecutionEngineConfiguration config = new DefaultExecutionEngineConfiguration();
+		config.setChangeSet("classpath:does not exist.xml");
+		
+		KnowledgeBase kbase = builder.buildKnowledgeBase(config, null, this.getClass().getClassLoader());
+		fail("Build of knowledge base should fail as resource does not exist" + kbase);
+	}
 	
 	@Test
-	public void testRetrieveStatefulSessionNoPersistenceFromChangeSet() {
+	public void testRetrieveStatefulSessionNoPersistence() {
 		
 		ExecutionEngineBuilder builder = new ExecutionEngineBuilder();
-		ExecutionEngineConfiguration config = new DefaultExecutionEngineConfiguration();
+		DefaultExecutionEngineConfiguration config = new DefaultExecutionEngineConfiguration();
 		config.setChangeSet("classpath:ChangeSet.xml");
 		
 		KnowledgeBase kbase = builder.buildKnowledgeBase(config, null, this.getClass().getClassLoader());
@@ -121,7 +80,7 @@ public class ExecitionEngineBuilderTest {
 	}
 	
 	@Test
-	public void testRetrieveStatefulSessionPersistenceFromChangeSet() {
+	public void testRetrieveStatefulSessionPersistence() {
 		
 		ExecutionEngineBuilder builder = new ExecutionEngineBuilder();
 		DefaultExecutionEngineConfiguration config = new DefaultExecutionEngineConfiguration();
@@ -133,4 +92,5 @@ public class ExecitionEngineBuilderTest {
 		StatefulKnowledgeSession session = builder.retrieveSession(config, null, strategy, "testBaseKey", kbase, this.getClass().getClassLoader());
 		assertNotNull(session);
 	}
+	
 }

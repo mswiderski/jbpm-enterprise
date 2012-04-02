@@ -42,7 +42,7 @@ public interface ExecutionEngineFactory {
 	 * @return ready to use instance of <code>ExecutionEngine</code>
 	 * @throws IllegalArgumentException when <code>bundleClassLoader</code> is null
 	 */
-	public ExecutionEngine newExecutionEngine(ClassLoader bundleClassLoader, ExecutionEngineConfiguration config, ExecutionEngineCallback callback);
+	public ExecutionEngine newExecutionEngine(ClassLoader bundleClassLoader, ExecutionEngineConfiguration config, Object callback);
 
 	/**
 	 * Builds <code>ExecutionEngine</code> based on supplied configuration, which disables automatic resource resolving mechanism
@@ -57,6 +57,6 @@ public interface ExecutionEngineFactory {
 	 * @throws IllegalArgumentException when <code>bundleClassLoader</code> is null
 	 */
 	public ExecutionEngine newExecutionEngine(ClassLoader bundleClassLoader, ExecutionEngineConfiguration config, ExecutionEngineMapperStrategy strategy,
-			ExecutionEngineCallback callback);
+			Object callback);
 
 }

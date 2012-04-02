@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ JBoss, Home of Professional Open Source.
+  ~ Copyright (c) 2011, Red Hat, Inc., and individual contributors
+  ~ as indicated by the @author tags. See the copyright.txt file in the
+  ~ distribution for a full listing of individual contributors.
+  ~
+  ~ This is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU Lesser General Public License as
+  ~ published by the Free Software Foundation; either version 2.1 of
+  ~ the License, or (at your option) any later version.
+  ~
+  ~ This software is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this software; if not, write to the Free
+  ~ Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+  ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+  -->
+<module xmlns="urn:jboss:module:1.1" name="org.jbpm">
+
+    <resources>
+    	<resource-root path="knowledge-api-5.3.2-SNAPSHOT.jar"/>
+        <resource-root path="drools-compiler-5.3.2-SNAPSHOT.jar"/>
+        <resource-root path="drools-core-5.3.2-SNAPSHOT.jar"/>
+        <resource-root path="drools-persistence-jpa-5.3.2-SNAPSHOT.jar"/>
+        <resource-root path="jbpm-tm.jar"/>
+        <resource-root path="jbpm-bam-5.3.0-SNAPSHOT.jar"/>
+        <resource-root path="jbpm-bpmn2-5.3.0-SNAPSHOT.jar"/>
+        <resource-root path="jbpm-flow-5.3.0-SNAPSHOT.jar"/>
+        <resource-root path="jbpm-flow-builder-5.3.0-SNAPSHOT.jar"/>
+        <resource-root path="jbpm-persistence-jpa-5.3.0-SNAPSHOT.jar"/>
+        <resource-root path="jbpm-workitems-5.3.0-SNAPSHOT.jar"/>
+        <resource-root path="jbpm-human-task-5.3.0-SNAPSHOT.jar"/>        
+        <resource-root path="xstream-1.4.1.jar"/>
+        <resource-root path="mvel2-2.1.0.jar"/>
+        <resource-root path="mina-core-2.0.1.jar"/>
+        <resource-root path="antlr-runtime-3.3.jar"/>
+        <resource-root path="antlr-3.3.jar"/>
+        <resource-root path="ecj-3.5.1.jar"/>
+        <!-- Insert resources here -->
+        <resource-root path="jbpm-enterprise-platform-impl-0.0.1-SNAPSHOT.jar"/>
+    </resources>
+
+    <dependencies>
+    	<module name="org.osgi.core"/>
+    	<module name="org.jboss.osgi.framework"/> 
+    	<module name="org.jbpm.enterprise"/>   	
+        <module name="javax.persistence.api"/>
+        <module name="org.hibernate"/>
+        <module name="org.jboss.jboss-transaction-spi"/>
+        <module name="org.jboss.logging"/>
+        <module name="org.hornetq"/>
+    	<module name="javaee.api" />	
+    	<module name="org.jboss.as.jpa" />
+        <module name="org.javassist" />
+        <module name="org.slf4j" />
+    </dependencies>
+</module>

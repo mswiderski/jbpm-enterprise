@@ -1,9 +1,5 @@
 package org.jbpm.enterprise.platform;
 
-import java.util.Map;
-
-import org.drools.builder.ResourceType;
-import org.drools.io.Resource;
 
 /**
  * Data holder for all information related to configuration of Execution Engine including Human Task components.
@@ -25,11 +21,6 @@ public interface ExecutionEngineConfiguration {
 	
 	public boolean isPersistenceEnabled();
 	
-	public void addResource(Resource resource, ResourceType type);
-	
-	public void setResources(Map<Resource, ResourceType> resources);
-	
-	public Map<Resource, ResourceType> getResources(); 
 	
 	public void setChangeSet(String changesetLocation);
 	

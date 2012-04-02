@@ -1,7 +1,5 @@
 package org.jbpm.enterprise.platform.impl;
 
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Properties;
 
 import javax.naming.InitialContext;
@@ -15,7 +13,6 @@ import org.drools.builder.KnowledgeBuilder;
 import org.drools.builder.KnowledgeBuilderConfiguration;
 import org.drools.builder.KnowledgeBuilderFactory;
 import org.drools.builder.ResourceType;
-import org.drools.io.Resource;
 import org.drools.io.ResourceFactory;
 import org.drools.persistence.jpa.JPAKnowledgeService;
 import org.drools.runtime.Environment;
@@ -32,20 +29,15 @@ public class ExecutionEngineBuilder {
 	protected EntityManagerFactory emf; 
 
 	public KnowledgeBase buildKnowledgeBase(ExecutionEngineConfiguration config, ExecutionEngineCallback callback, ClassLoader classLoader) {
-		KnowledgeBuilderConfiguration kBaseConfig = KnowledgeBuilderFactory.newKnowledgeBuilderConfiguration(new Properties(), classLoader);
+		CompositeClassLoader compositeCL = new CompositeClassLoader();
+		compositeCL.addClassLoader(classLoader);
+		compositeCL.addClassLoader(getClass().getClassLoader());
+		KnowledgeBuilderConfiguration kBaseConfig = KnowledgeBuilderFactory.newKnowledgeBuilderConfiguration(new Properties(), compositeCL);
         KnowledgeBuilder builder = KnowledgeBuilderFactory.newKnowledgeBuilder(kBaseConfig);
 		
 		
 		if (callback != null) {
 			callback.preKnowledgeBaseCreate(builder);
-		}
-		Map<Resource, ResourceType> resources = config.getResources();
-		if (resources != null) {
-			Iterator<Resource> it = resources.keySet().iterator();
-			while (it.hasNext()) {
-				Resource resource = (Resource) it.next();
-				builder.add(resource, resources.get(resource));
-			}
 		}
 		
 		if (config.getChangeSet() != null) {

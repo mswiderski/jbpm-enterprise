@@ -1,0 +1,3 @@
+mvn archetype:generate -DarchetypeGroupId=org.jbpm -DarchetypeArtifactId=jbpm-enterprise-bundle-archetype -DarchetypeVersion=0.0.1-SNAPSHOT  -DgroupId=org.jbpm.enterprise.quickstarts -DartifactId=upgrade-bundle
+
+mvn archetype:generate -DarchetypeGroupId=org.jbpm -DarchetypeArtifactId=jbpm-enterprise-webapp-archetype -DarchetypeVersion=0.0.1-SNAPSHOT  -DgroupId=org.jbpm.enterprise.quickstarts -DartifactId=hello-web

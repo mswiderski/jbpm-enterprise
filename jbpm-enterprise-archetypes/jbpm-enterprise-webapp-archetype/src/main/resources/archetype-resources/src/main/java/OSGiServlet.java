@@ -3,6 +3,8 @@
 #set( $symbol_escape = '\' )
 package ${groupId};
 
+import java.io.IOException;
+
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

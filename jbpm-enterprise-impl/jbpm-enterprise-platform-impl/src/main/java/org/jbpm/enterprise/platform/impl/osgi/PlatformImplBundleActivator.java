@@ -35,7 +35,7 @@ public class PlatformImplBundleActivator implements BundleActivator {
 		// register any resolvers that this impl bundle introduces
 		ServiceReference resolverManagerRef = context.getServiceReference(ExecutionEngineResolverManager.class.getName());
 		
-		ExecutionEngineResolverManager resolverManager = context.getService(resolverManagerRef);
+		ExecutionEngineResolverManager resolverManager = (ExecutionEngineResolverManager)context.getService(resolverManagerRef);
 		String bundleId = Long.toString(context.getBundle().getBundleId());
 		
 		ExecutionEngineResolver versionBasedResolver = new VersionBasedResolver(context);
@@ -56,7 +56,7 @@ public class PlatformImplBundleActivator implements BundleActivator {
 			ServiceReference resolverManagerRef = context.getServiceReference(ExecutionEngineResolverManager.class.getName());
 			
 			if (resolverManagerRef != null) {
-				ExecutionEngineResolverManager resolverManager = context.getService(resolverManagerRef);
+				ExecutionEngineResolverManager resolverManager = (ExecutionEngineResolverManager)context.getService(resolverManagerRef);
 				String bundleId = Long.toString(context.getBundle().getBundleId());
 				
 				for (ExecutionEngineResolver resolver : registeredResolvers) {

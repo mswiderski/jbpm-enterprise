@@ -2,11 +2,6 @@ package org.jbpm.enterprise.platform;
 
 import java.util.UUID;
 
-import org.drools.KnowledgeBase;
-import org.drools.runtime.StatefulKnowledgeSession;
-import org.drools.runtime.StatelessKnowledgeSession;
-import org.drools.runtime.process.ProcessInstance;
-
 /**
  * Entry point for all clients that rely on processes and rules.
  * Encapsulates <code>KnowledgeBase</code> and its session management delivering simplified but not limited usage of jBPM and drools.
@@ -22,13 +17,13 @@ public interface ExecutionEngine {
 	 * Returns <code>KnowledgeBase</code> dedicated to this engine
 	 * @return underlying <code>KnowledgeBase</code>
 	 */
-	public KnowledgeBase getKnowledgeBase();
+	public Object getKnowledgeBase();
 	
 	/**
 	 * Creates and returns stateless sessions for "single shot" usage.
 	 * @return <code>StatelessKnowledgeSession</code>
 	 */
-	public StatelessKnowledgeSession getStatelessSession();
+	public SessionDelegate getStatelessSession();
 	
 	/**
 	 * Returns stateful session for given business key. If one does not exist new will be created
@@ -36,14 +31,14 @@ public interface ExecutionEngine {
 	 * @param businessKey user defined business key
 	 * @return session found under given business key if such exist of new one
 	 */
-	public StatefulKnowledgeSession getSession(String businessKey);
+	public SessionDelegate getSession(String businessKey);
 	
 	/**
 	 * Returns stateful session with given identifier if one exist or null
 	 * @param id internal identifier of the session
 	 * @return session if exists under given id or null
 	 */
-	public StatefulKnowledgeSession getSessionById(int id);
+	public SessionDelegate getSessionById(int id);
 	
 	/**
 	 * Returns instance of HumanTask connector that was created for this ExecutionEngine.
@@ -57,12 +52,6 @@ public interface ExecutionEngine {
 	 */
 	public UUID getUUID();
 	
-	/**
-	 * Build composite identifier that includes UUID of the ExecutionEngine for given ProcessInstance
-	 * @param instance process instance which id should be enhanced
-	 * @return returns enhanced process instance id with UUID of the ExecutionEngine
-	 */
-	public String buildCompositeId(ProcessInstance instance);
 	
 	/**
 	 * Build composite identifier that includes UUID of the ExecutionEngine for given id
@@ -75,5 +64,5 @@ public interface ExecutionEngine {
 	 * Dispose given session and informs the engine about is disposal.
 	 * @param session
 	 */
-	public void disposeSession(StatefulKnowledgeSession session);
+	public void disposeSession(SessionDelegate session);
 }

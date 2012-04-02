@@ -11,7 +11,6 @@ import org.drools.event.rule.WorkingMemoryEventListener;
 import org.drools.runtime.Calendars;
 import org.drools.runtime.Channel;
 import org.drools.runtime.Environment;
-import org.drools.runtime.ExitPoint;
 import org.drools.runtime.Globals;
 import org.drools.runtime.KnowledgeSessionConfiguration;
 import org.drools.runtime.ObjectFilter;
@@ -29,14 +28,14 @@ import org.drools.time.SessionClock;
 import org.jbpm.enterprise.platform.ExecutionEngine;
 import org.jbpm.enterprise.platform.SessionDelegate;
 
-public class SessionDelegateImpl implements SessionDelegate {
+public class StatefulSessionDelegateImpl implements SessionDelegate {
 	
 	private StatefulKnowledgeSession delegate;
 	private ExecutionEngine onwingEngine;
 	
 	private boolean disposed = false;
 	
-	public SessionDelegateImpl(StatefulKnowledgeSession origin, ExecutionEngine execEngine) {
+	public StatefulSessionDelegateImpl(StatefulKnowledgeSession origin, ExecutionEngine execEngine) {
 		this.delegate = origin;
 		this.onwingEngine = execEngine;
 	}
@@ -108,18 +107,6 @@ public class SessionDelegateImpl implements SessionDelegate {
 	public KnowledgeBase getKnowledgeBase() {
 		
 		return this.delegate.getKnowledgeBase();
-	}
-
-	@Deprecated
-	public void registerExitPoint(String name, ExitPoint exitPoint) {
-		this.delegate.registerExitPoint(name, exitPoint);
-
-	}
-
-	@Deprecated
-	public void unregisterExitPoint(String name) {
-		this.delegate.unregisterExitPoint(name);
-
 	}
 
 	public void registerChannel(String name, Channel channel) {
@@ -227,9 +214,9 @@ public class SessionDelegateImpl implements SessionDelegate {
 		return this.delegate.getFactCount();
 	}
 
-	public ProcessInstance startProcess(String processId) {
+	public long startProcess(String processId) {
 		
-		return this.delegate.startProcess(processId);
+		return this.delegate.startProcess(processId).getId();
 	}
 
 	public ProcessInstance startProcess(String processId, Map<String, Object> parameters) {
@@ -329,7 +316,7 @@ public class SessionDelegateImpl implements SessionDelegate {
 
 	public void dispose() {
 		if (!disposed) {
-			this.onwingEngine.disposeSession(this.delegate);
+			((ExecutionEngineImpl)this.onwingEngine).disposeSession(this.delegate);
 			this.disposed = true;
 		}
 	}
