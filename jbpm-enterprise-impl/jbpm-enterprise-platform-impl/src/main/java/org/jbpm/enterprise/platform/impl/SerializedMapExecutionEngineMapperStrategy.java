@@ -15,6 +15,7 @@ import org.jbpm.enterprise.platform.ExecutionEngineMapperStrategy;
 
 public class SerializedMapExecutionEngineMapperStrategy implements ExecutionEngineMapperStrategy {
 
+	protected UUID myUUID;
 	protected String owner;
 	protected String storageLocation;
 	protected Map<String, Integer> internalMap = new ConcurrentHashMap<String, Integer>();
@@ -73,8 +74,10 @@ public class SerializedMapExecutionEngineMapperStrategy implements ExecutionEngi
 	}
 
 	public UUID getUUID() {
-		
-		return new UUID("SerializableMapMapperStrategyFor".hashCode(), owner.hashCode());
+		if (myUUID == null) {
+			myUUID = new UUID("SerializableMapMapperStrategyFor".hashCode(), owner.hashCode());
+		}
+		return myUUID;
 	}
 	
 	@SuppressWarnings("unchecked")

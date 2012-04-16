@@ -90,4 +90,15 @@ public class SerializedMapExecutionEngineMapperStrategyTest {
 		assertNull(businessKey);
 		
 	}
+	
+	@Test
+	public void testUUID() {
+		boolean result = strategy.storeMapping("unit-test-key", 100);
+		assertTrue(result);
+		assertNotNull(strategy.getUUID());
+		
+		String expectedUUID = "00000000-7213-9918-ffff-ffffb6e0638b";
+		assertEquals(expectedUUID, strategy.getUUID().toString());
+		
+	}
 }
