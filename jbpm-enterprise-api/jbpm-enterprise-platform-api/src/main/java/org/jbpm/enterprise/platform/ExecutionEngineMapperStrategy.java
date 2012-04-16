@@ -3,11 +3,11 @@ package org.jbpm.enterprise.platform;
 import java.util.UUID;
 
 /**
- * SessionMappingStrategy is responsible for holding information about business key and internal identifiers
+ * ExecutionEngineMapperStrategy is responsible for holding information about business key and internal identifiers
  * to allow applications deal only with business data and not to be aware of any internal ids.
  * 
  */
-public interface SessionMappingStrategy {
+public interface ExecutionEngineMapperStrategy {
 
 	/**
 	 * Returns internal id for given business key

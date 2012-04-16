@@ -22,7 +22,7 @@ import org.drools.runtime.StatefulKnowledgeSession;
 import org.drools.util.CompositeClassLoader;
 import org.jbpm.enterprise.platform.ExecutionEngineCallback;
 import org.jbpm.enterprise.platform.ExecutionEngineConfiguration;
-import org.jbpm.enterprise.platform.SessionMappingStrategy;
+import org.jbpm.enterprise.platform.ExecutionEngineMapperStrategy;
 
 public class ExecutionEngineBuilder {
 	
@@ -61,7 +61,7 @@ public class ExecutionEngineBuilder {
 	}
 	
 	public StatefulKnowledgeSession retrieveSession(ExecutionEngineConfiguration config, ExecutionEngineCallback callback, 
-			SessionMappingStrategy strategy, String businessKey, KnowledgeBase kbase, ClassLoader classLoader) {
+			ExecutionEngineMapperStrategy strategy, String businessKey, KnowledgeBase kbase, ClassLoader classLoader) {
 		Environment environment = KnowledgeBaseFactory.newEnvironment();
 		// TODO add required information to the environment
 		KnowledgeSessionConfiguration configuration = KnowledgeBaseFactory.newKnowledgeSessionConfiguration();
