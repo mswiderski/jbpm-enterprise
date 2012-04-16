@@ -20,7 +20,7 @@ public class VersionBasedResolver implements ExecutionEngineResolver {
 	
 	public UUID getUUID() {
 		if (this.myUUID == null) {
-			this.myUUID = new UUID("VersionBasedResolver".hashCode(), "Version1".hashCode());;
+			this.myUUID = UUID.randomUUID();
 		}
 		return this.myUUID;
 	}

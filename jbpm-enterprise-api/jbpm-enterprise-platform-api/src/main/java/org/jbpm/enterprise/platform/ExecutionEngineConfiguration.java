@@ -17,8 +17,6 @@ public interface ExecutionEngineConfiguration {
 	
 	public String getOwner();
 	
-	public void setOwner(String owner);
-	
 	public String getPersistenceUnit();
 	
 	public boolean isPersistenceEnabled();

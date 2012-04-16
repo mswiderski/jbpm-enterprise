@@ -8,7 +8,6 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 
 import org.jbpm.enterprise.platform.ExecutionEngine;
-import org.jbpm.enterprise.platform.ExecutionEngineConfiguration;
 import org.jbpm.enterprise.platform.ExecutionEngineFactory;
 import org.jbpm.enterprise.platform.impl.DefaultExecutionEngineConfiguration;
 import org.osgi.framework.BundleActivator;
@@ -36,9 +35,7 @@ public class JbpmBundleActivator implements BundleActivator {
 			throw new IllegalStateException("ExecutionEngineFactory not found in OSGi registry using filter " + filter);
 		}
 
-		ExecutionEngineConfiguration config = new DefaultExecutionEngineConfiguration();
-		// owner must be always set to be able to identify the engine on runtime
-		config.setOwner(context.getBundle().getSymbolicName() + "-" + context.getBundle().getVersion().toString());
+		DefaultExecutionEngineConfiguration config = new DefaultExecutionEngineConfiguration();
 		config.setChangeSet("classpath:ChangeSet.xml");
 		ExecutionEngine engine = eeFactory.newExecutionEngine(this.getClass().getClassLoader(), config);
 		

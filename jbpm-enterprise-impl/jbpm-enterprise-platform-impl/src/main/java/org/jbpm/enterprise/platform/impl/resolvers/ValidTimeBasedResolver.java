@@ -20,7 +20,7 @@ public class ValidTimeBasedResolver implements ExecutionEngineResolver {
 	
 	public UUID getUUID() {
 		if (this.myUUID == null) {
-			this.myUUID = new UUID("ValidTimeBasedResolver".hashCode(), "Version1".hashCode());
+			this.myUUID = UUID.randomUUID();
 		}
 		return this.myUUID;
 	}
