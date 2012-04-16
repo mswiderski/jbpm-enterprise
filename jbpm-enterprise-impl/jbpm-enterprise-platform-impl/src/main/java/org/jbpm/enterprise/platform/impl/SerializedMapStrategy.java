@@ -15,6 +15,7 @@ import org.jbpm.enterprise.platform.SessionMappingStrategy;
 
 public class SerializedMapStrategy implements SessionMappingStrategy {
 
+	protected UUID myUUID;
 	protected String owner;
 	protected String storageLocation;
 	protected Map<String, Integer> internalMap = new ConcurrentHashMap<String, Integer>();
@@ -76,8 +77,10 @@ public class SerializedMapStrategy implements SessionMappingStrategy {
 	}
 
 	public UUID getUUID() {
-		
-		return new UUID("SerializableMapMapperStrategyFor".hashCode(), owner.hashCode());
+		if (myUUID == null) {
+			myUUID = new UUID("SerializableMapMapperStrategyFor".hashCode(), owner.hashCode());
+		}
+		return myUUID;
 	}
 	
 	@SuppressWarnings("unchecked")

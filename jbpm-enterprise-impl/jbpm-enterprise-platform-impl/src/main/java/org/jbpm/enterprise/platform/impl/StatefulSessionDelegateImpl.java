@@ -214,14 +214,14 @@ public class StatefulSessionDelegateImpl implements SessionDelegate {
 		return this.delegate.getFactCount();
 	}
 
-	public long startProcess(String processId) {
-		
-		return this.delegate.startProcess(processId).getId();
+	public String startProcess(String processId) {
+		ProcessInstance pi = this.delegate.startProcess(processId);		
+		return this.onwingEngine.buildCompositeId(pi.getId()+"");
 	}
 
-	public ProcessInstance startProcess(String processId, Map<String, Object> parameters) {
-		
-		return this.delegate.startProcess(processId, parameters);
+	public String startProcess(String processId, Map<String, Object> parameters) {
+		ProcessInstance pi = this.delegate.startProcess(processId, parameters);
+		return this.onwingEngine.buildCompositeId(pi.getId()+"");
 	}
 
 	public ProcessInstance createProcessInstance(String processId, Map<String, Object> parameters) {

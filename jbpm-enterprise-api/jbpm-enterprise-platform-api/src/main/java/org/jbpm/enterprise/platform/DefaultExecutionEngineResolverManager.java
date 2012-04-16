@@ -12,7 +12,9 @@ public class DefaultExecutionEngineResolverManager implements ExecutionEngineRes
 	private Map<UUID, ExecutionEngineResolver> resolvers = new ConcurrentHashMap<UUID, ExecutionEngineResolver>();
 	
 	public void register(String owner, ExecutionEngineResolver resolver) {
-		 resolvers.put(resolver.getUUID(), resolver);
+		if (!resolvers.containsKey(resolver.getUUID())) {
+			resolvers.put(resolver.getUUID(), resolver);
+		}
 
 	}
 

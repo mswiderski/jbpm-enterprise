@@ -14,6 +14,8 @@ import org.jbpm.enterprise.platform.SessionDelegate;
 
 public class ExecutionEngineImpl implements ExecutionEngine {
 
+	private UUID myUUID;
+	
 	protected KnowledgeBase knowledgeBase;
 	protected SessionMappingStrategy strategy;
 	protected ExecutionEngineCallback callback;
@@ -26,6 +28,10 @@ public class ExecutionEngineImpl implements ExecutionEngine {
 	public ExecutionEngineImpl(ExecutionEngineConfiguration config, ClassLoader bundleClassLoader) {
 		this.config = config;
 		this.bundleClassLoader = bundleClassLoader;
+		
+		if (this.config.getOwner() == null || this.config.getOwner().length() < 1) {
+			throw new RuntimeException("Owner is not configured, execution engine cannot be created. Please set owner on configuration object");
+		}
 	}
 	
 	public ExecutionEngineCallback getCallback() {
@@ -85,8 +91,10 @@ public class ExecutionEngineImpl implements ExecutionEngine {
 	}
 
 	public UUID getUUID() {
-		// TODO make it unique regardless of restarts
-		return UUID.randomUUID();
+		if (this.myUUID == null) {
+			this.myUUID = new UUID("ExecutionEngineImpl".hashCode(), config.getOwner().hashCode());;
+		}
+		return this.myUUID;
 	}
 
 	public ExecutionEngineBuilder getBuilder() {
