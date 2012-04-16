@@ -11,9 +11,9 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.jbpm.enterprise.platform.ExecutionEngineMapperStrategy;
+import org.jbpm.enterprise.platform.SessionMappingStrategy;
 
-public class SerializedMapExecutionEngineMapperStrategy implements ExecutionEngineMapperStrategy {
+public class SerializedMapStrategy implements SessionMappingStrategy {
 
 	protected String owner;
 	protected String storageLocation;
@@ -21,7 +21,7 @@ public class SerializedMapExecutionEngineMapperStrategy implements ExecutionEngi
 	
 	private Map<Integer, String> localCache = new ConcurrentHashMap<Integer, String>();
 	
-	public SerializedMapExecutionEngineMapperStrategy(String owner, String storageLocation) {
+	public SerializedMapStrategy(String owner, String storageLocation) {
 		this.owner = owner;
 		this.storageLocation = storageLocation;
 		
@@ -67,7 +67,10 @@ public class SerializedMapExecutionEngineMapperStrategy implements ExecutionEngi
 		} else {
 			internalMap.put(businessKey, id);
 			// serialize internal map
-			writeSerilizedFile();
+			writeSerializedFile();
+
+            //do eager load, it's inexpensive here
+            localCache.put(id, businessKey);
 			return true;
 		}
 	}
@@ -105,7 +108,7 @@ public class SerializedMapExecutionEngineMapperStrategy implements ExecutionEngi
 		return storageLocation + File.separator + getUUID() + ".ser";
 	}
 
-	protected void writeSerilizedFile() {
+	protected void writeSerializedFile() {
 		String serializable = getAbsoluteFileName();
 		FileOutputStream fos = null;
         ObjectOutputStream out = null;

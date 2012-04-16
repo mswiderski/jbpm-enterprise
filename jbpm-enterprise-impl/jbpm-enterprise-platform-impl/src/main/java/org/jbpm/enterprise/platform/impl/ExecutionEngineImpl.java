@@ -6,17 +6,16 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.drools.KnowledgeBase;
 import org.drools.runtime.StatefulKnowledgeSession;
-import org.drools.runtime.process.ProcessInstance;
 import org.jbpm.enterprise.platform.ExecutionEngine;
 import org.jbpm.enterprise.platform.ExecutionEngineCallback;
 import org.jbpm.enterprise.platform.ExecutionEngineConfiguration;
-import org.jbpm.enterprise.platform.ExecutionEngineMapperStrategy;
+import org.jbpm.enterprise.platform.SessionMappingStrategy;
 import org.jbpm.enterprise.platform.SessionDelegate;
 
 public class ExecutionEngineImpl implements ExecutionEngine {
 
 	protected KnowledgeBase knowledgeBase;
-	protected ExecutionEngineMapperStrategy strategy;
+	protected SessionMappingStrategy strategy;
 	protected ExecutionEngineCallback callback;
 	protected ExecutionEngineConfiguration config;
 	protected ClassLoader bundleClassLoader;
@@ -37,11 +36,11 @@ public class ExecutionEngineImpl implements ExecutionEngine {
 		this.callback = callback;
 	}
 
-	public ExecutionEngineMapperStrategy getStrategy() {
+	public SessionMappingStrategy getStrategy() {
 		return strategy;
 	}
 
-	public void setStrategy(ExecutionEngineMapperStrategy strategy) {
+	public void setStrategy(SessionMappingStrategy strategy) {
 		this.strategy = strategy;
 	}
 
@@ -88,16 +87,6 @@ public class ExecutionEngineImpl implements ExecutionEngine {
 	public UUID getUUID() {
 		// TODO make it unique regardless of restarts
 		return UUID.randomUUID();
-	}
-
-	public String buildCompositeId(ProcessInstance instance) {
-		
-		return instance.getId() + "@" + getUUID();
-	}
-
-	public String buildCompositeId(String id) {
-		
-		return id  + "@" + getUUID();
 	}
 
 	public ExecutionEngineBuilder getBuilder() {

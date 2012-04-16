@@ -8,18 +8,18 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 
-import org.jbpm.enterprise.platform.ExecutionEngineMapperStrategy;
+import org.jbpm.enterprise.platform.SessionMappingStrategy;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class SerializedMapExecutionEngineMapperStrategyTest {
+public class SerializedMapSessionMappingStrategyTest {
 	
-	private ExecutionEngineMapperStrategy strategy = null;
+	private SessionMappingStrategy strategy = null;
 	
 	@Before
 	public void setup() {
-		strategy = new SerializedMapExecutionEngineMapperStrategy("test-case", System.getProperty("java.io.tmpdir"));
+		strategy = new SerializedMapStrategy("test-case", System.getProperty("java.io.tmpdir"));
 	}
 	
 	@After

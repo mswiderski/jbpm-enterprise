@@ -9,7 +9,7 @@ import java.io.File;
 import org.drools.KnowledgeBase;
 import org.drools.runtime.StatefulKnowledgeSession;
 import org.jbpm.enterprise.platform.ExecutionEngineConfiguration;
-import org.jbpm.enterprise.platform.ExecutionEngineMapperStrategy;
+import org.jbpm.enterprise.platform.SessionMappingStrategy;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -74,7 +74,7 @@ public class ExecitionEngineBuilderTest {
 		config.setChangeSet("classpath:ChangeSet.xml");
 		
 		KnowledgeBase kbase = builder.buildKnowledgeBase(config, null, this.getClass().getClassLoader());
-		ExecutionEngineMapperStrategy strategy = new SerializedMapExecutionEngineMapperStrategy("test", System.getProperty("java.io.tmpdir"));
+		SessionMappingStrategy strategy = new SerializedMapStrategy("test", System.getProperty("java.io.tmpdir"));
 		StatefulKnowledgeSession session = builder.retrieveSession(config, null, strategy, "testBaseKey", kbase, this.getClass().getClassLoader());
 		assertNotNull(session);
 	}
@@ -88,7 +88,7 @@ public class ExecitionEngineBuilderTest {
 		config.setPersistenceUnit("org.jbpm.persistence.jpa");
 		
 		KnowledgeBase kbase = builder.buildKnowledgeBase(config, null, this.getClass().getClassLoader());
-		ExecutionEngineMapperStrategy strategy = new SerializedMapExecutionEngineMapperStrategy("test", System.getProperty("java.io.tmpdir"));
+		SessionMappingStrategy strategy = new SerializedMapStrategy("test", System.getProperty("java.io.tmpdir"));
 		StatefulKnowledgeSession session = builder.retrieveSession(config, null, strategy, "testBaseKey", kbase, this.getClass().getClassLoader());
 		assertNotNull(session);
 	}

@@ -6,7 +6,7 @@ import org.jbpm.enterprise.platform.ExecutionEngine;
 import org.jbpm.enterprise.platform.ExecutionEngineCallback;
 import org.jbpm.enterprise.platform.ExecutionEngineConfiguration;
 import org.jbpm.enterprise.platform.ExecutionEngineFactory;
-import org.jbpm.enterprise.platform.ExecutionEngineMapperStrategy;
+import org.jbpm.enterprise.platform.SessionMappingStrategy;
 
 public class ExecutionEngineFactoryImpl implements ExecutionEngineFactory {
 
@@ -27,7 +27,7 @@ public class ExecutionEngineFactoryImpl implements ExecutionEngineFactory {
 		return newExecutionEngine(bundleClassLoader, config, null, callback);
 	}
 
-	public ExecutionEngine newExecutionEngine(ClassLoader bundleClassLoader, ExecutionEngineConfiguration config, ExecutionEngineMapperStrategy strategy,
+	public ExecutionEngine newExecutionEngine(ClassLoader bundleClassLoader, ExecutionEngineConfiguration config, SessionMappingStrategy strategy,
 			Object callback) {
 		CompositeClassLoader compositeClassloader = buildCompositeClassloader(bundleClassLoader);
 		ExecutionEngineImpl executionEngine = new ExecutionEngineImpl(config, compositeClassloader);
@@ -40,7 +40,7 @@ public class ExecutionEngineFactoryImpl implements ExecutionEngineFactory {
 		
 		// configure strategy
 		 if (strategy == null) {
-			 strategy = new SerializedMapExecutionEngineMapperStrategy("engine", System.getProperty("java.io.tmpdir"));
+			 strategy = new SerializedMapStrategy("engine", System.getProperty("java.io.tmpdir"));
 		 }
 		 executionEngine.setStrategy(strategy);
 		 

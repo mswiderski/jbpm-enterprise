@@ -52,14 +52,6 @@ public interface ExecutionEngine {
 	 */
 	public UUID getUUID();
 	
-	
-	/**
-	 * Build composite identifier that includes UUID of the ExecutionEngine for given id
-	 * @param id generic id that should be enhanced
-	 * @return returns enhanced id with UUID of the ExecutionEngine
-	 */
-	public String buildCompositeId(String id);
-	
 	/**
 	 * Dispose given session and informs the engine about is disposal.
 	 * @param session
