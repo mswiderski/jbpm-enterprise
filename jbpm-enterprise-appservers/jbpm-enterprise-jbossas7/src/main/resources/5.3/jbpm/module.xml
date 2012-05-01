@@ -58,5 +58,6 @@
     	<module name="org.jboss.as.jpa" />
         <module name="org.javassist" />
         <module name="org.slf4j" />
+        <module name="org.infinispan" />
     </dependencies>
 </module>
