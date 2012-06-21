@@ -78,4 +78,10 @@ public class InfinispanExecutionEngineMapperStrategy implements ExecutionEngineM
 		return this.myUUID;
 	}
 
+	public void removeMapping(String businessKey) {
+		Integer id = (Integer) this.cache.remove(businessKey);
+		this.localCache.remove(id);
+		
+	}
+
 }

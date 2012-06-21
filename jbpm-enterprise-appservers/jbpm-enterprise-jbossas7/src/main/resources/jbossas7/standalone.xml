@@ -98,6 +98,14 @@
                         <password>sa</password>
                     </security>
                 </datasource>
+                <datasource jndi-name="java:jboss/datasources/jbpmDS" pool-name="H2DS" enabled="true" jta="true" use-java-context="true" use-ccm="true">
+                    <connection-url>jdbc:h2:tcp://localhost/runtime/jbpm</connection-url>
+                    <driver>h2</driver>
+                    <security>
+                        <user-name>sa</user-name>
+                        <password></password>
+                    </security>
+                </datasource>
                 <drivers>
                     <driver name="h2" module="com.h2database.h2">
                         <xa-datasource-class>org.h2.jdbcx.JdbcDataSource</xa-datasource-class>
@@ -215,6 +223,7 @@
                 <!-- jBPM enterprise -->      
                 <capability name="org.jbpm.enterprise" startlevel="1"/>                          
                 <capability name="org.jbpm" startlevel="2"/>
+                <capability name="org.jbpm:5.3" startlevel="2"/>
                 <capability name="org.jbpm:5.2" startlevel="2"/>
                 
                 <!-- bundles started in startlevel 1 -->

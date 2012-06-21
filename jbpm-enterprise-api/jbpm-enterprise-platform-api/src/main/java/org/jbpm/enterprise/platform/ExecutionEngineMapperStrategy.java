@@ -37,4 +37,10 @@ public interface ExecutionEngineMapperStrategy {
 	 * @return UUID
 	 */
 	public UUID getUUID();
+	
+	/**
+	 * Removes given business key and its corresponding identifier from the store.
+	 * @param businessKey
+	 */
+	public void removeMapping(String businessKey);
 }

@@ -122,4 +122,11 @@ public class SerializedMapExecutionEngineMapperStrategy implements ExecutionEngi
         }
 	}
 
+	public void removeMapping(String businessKey) {
+		Integer id = this.internalMap.remove(businessKey);
+		this.localCache.remove(id);
+		writeSerilizedFile();
+		
+	}
+
 }

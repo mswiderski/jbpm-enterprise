@@ -1,5 +1,6 @@
 package org.jbpm.enterprise.platform.impl;
 
+import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -67,9 +68,10 @@ public class ExecutionEngineImpl implements ExecutionEngine {
 
 	public SessionDelegate getSession(String businessKey) {
 		int internalId = strategy.resolveIdByBusinessKey(businessKey);
-		if (internalId == -1) {
+		if (internalId == -1 || !localCache.containsKey(internalId)) {
 			StatefulKnowledgeSession session = builder.retrieveSession(this.config, callback, strategy, businessKey, this.knowledgeBase, this.bundleClassLoader);
 			StatefulSessionDelegateImpl delegate = new StatefulSessionDelegateImpl(session, this);
+			strategy.storeMapping(businessKey, delegate.getId());
 			localCache.put(session.getId(), delegate);
 			
 			return delegate;
@@ -125,6 +127,16 @@ public class ExecutionEngineImpl implements ExecutionEngine {
 		this.localCache.remove(session.getId());
 		session.dispose();
 		
+	}
+	
+	public void close() {
+		Iterator<SessionDelegate> sessions = this.localCache.values().iterator();
+		
+		while (sessions.hasNext()) {
+			SessionDelegate session = (SessionDelegate) sessions.next();
+			
+			session.dispose();
+		}
 	}
 
 }

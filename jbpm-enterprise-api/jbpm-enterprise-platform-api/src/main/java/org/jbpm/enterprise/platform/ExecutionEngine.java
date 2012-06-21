@@ -65,4 +65,10 @@ public interface ExecutionEngine {
 	 * @param session
 	 */
 	public void disposeSession(SessionDelegate session);
+	
+	
+	/**
+	 * Closes this execution engine which will dispose all active sessions.
+	 */
+	public void close();
 }
