@@ -9,6 +9,7 @@ import org.jbpm.enterprise.platform.ExecutionEngineFactory;
 import org.jbpm.enterprise.platform.ExecutionEngineResolver;
 import org.jbpm.enterprise.platform.ExecutionEngineResolverManager;
 import org.jbpm.enterprise.platform.impl.ExecutionEngineFactoryImpl;
+import org.jbpm.enterprise.platform.impl.resolvers.NameBasedResolver;
 import org.jbpm.enterprise.platform.impl.resolvers.UUIDBasedResolver;
 import org.jbpm.enterprise.platform.impl.resolvers.ValidTimeBasedResolver;
 import org.jbpm.enterprise.platform.impl.resolvers.VersionBasedResolver;
@@ -50,6 +51,10 @@ public class PlatformImplBundleActivator implements BundleActivator {
 		ExecutionEngineResolver uuidBasedResolver = new UUIDBasedResolver(context);
 		resolverManager.register(bundleId, uuidBasedResolver);
 		registeredResolvers.add(uuidBasedResolver);
+		
+		ExecutionEngineResolver nameBasedResolver = new NameBasedResolver(context);
+		resolverManager.register(bundleId, nameBasedResolver);
+		registeredResolvers.add(nameBasedResolver);
 	}
 
 	public void stop(BundleContext context) throws Exception {

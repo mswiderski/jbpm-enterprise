@@ -26,9 +26,9 @@ public class ValidTimeBasedResolver implements ExecutionEngineResolver {
 	}
 
 	public boolean accepts(RequestContext requestContext) {
-		Object versionProp = requestContext.getProperty("version");
+		String versionProp = (String) requestContext.getProperty("version");
 		
-		if (versionProp == null) {
+		if (versionProp == null || versionProp.trim().length() == 0) {
 			return true;
 		}
 		return false;

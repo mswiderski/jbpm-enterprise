@@ -26,10 +26,10 @@ public class UUIDBasedResolver implements ExecutionEngineResolver {
 	}
 
 	public boolean accepts(RequestContext requestContext) {
-		Object uuidProp = requestContext.getProperty("uuid");
-		Object processInstanceProp = requestContext.getProperty("processInstanceId");
+		String uuidProp = (String) requestContext.getProperty("uuid");
+		String processInstanceProp = (String) requestContext.getProperty("processInstanceId");
 		
-		if (uuidProp != null || processInstanceProp != null) {
+		if (!isEmpty(uuidProp) || !isEmpty(processInstanceProp)) {
 			return true;
 		}
 		return false;
@@ -56,6 +56,13 @@ public class UUIDBasedResolver implements ExecutionEngineResolver {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	private boolean isEmpty(String value) {
+		if (value != null && value.trim().length() > 0) {
+			return false;
+		}
+		return true;
 	}
 
 }

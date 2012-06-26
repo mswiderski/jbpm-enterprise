@@ -9,26 +9,26 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
-public class VersionBasedResolver implements ExecutionEngineResolver {
+public class NameBasedResolver implements ExecutionEngineResolver {
 
 	private UUID myUUID;
 	private BundleContext bundleContext;
 	
-	public VersionBasedResolver(BundleContext bundleContext) {
+	public NameBasedResolver(BundleContext bundleContext) {
 		this.bundleContext = bundleContext;
 	}
 	
 	public UUID getUUID() {
 		if (this.myUUID == null) {
-			this.myUUID = new UUID("VersionBasedResolver".hashCode(), "Version1".hashCode());;
+			this.myUUID = new UUID("NameBasedResolver".hashCode(), "Version1".hashCode());
 		}
 		return this.myUUID;
 	}
 
 	public boolean accepts(RequestContext requestContext) {
-		String versionProp = (String) requestContext.getProperty("version");
+		String nameProp = (String)requestContext.getProperty("name");
 		
-		if (versionProp != null && versionProp.trim().length() > 0) {
+		if (nameProp != null && nameProp.trim().length() > 0) {
 			return true;
 		}
 		return false;
@@ -36,12 +36,14 @@ public class VersionBasedResolver implements ExecutionEngineResolver {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public ExecutionEngine lookUpExecutionEngine(RequestContext requestContext) {
-		
-		String filter =  "(version=" + requestContext.getProperty("version") + ")";
+
+		String filter =  "(name=" + requestContext.getProperty("name") + ")";
 		try {
 			ServiceReference[] refs = bundleContext.getServiceReferences(ExecutionEngine.class.getName(), filter);
-			if (refs.length >= 1) {
+			if (refs != null && refs.length >= 1) {
 				return (ExecutionEngine)bundleContext.getService(refs[0]);
+			} else { 
+				throw new IllegalArgumentException("Cannot find Execution engine with following criteria: " + filter);
 			}
 		} catch (InvalidSyntaxException e) {
 			
